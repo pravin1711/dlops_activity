@@ -1,10 +1,17 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
 
 def load_data(file_path):
-    """Load data from a CSV file."""
+    """Load data from a CSV file and encode categorical columns."""
     try:
         data = pd.read_excel(file_path)
+        
+        # Encode categorical columns
+        encoder = LabelEncoder()
+        for col in data.select_dtypes(include=['object']):
+            data[col] = encoder.fit_transform(data[col])
+        
         return data
     except FileNotFoundError:
         print("File not found. Please provide a valid file path.")
